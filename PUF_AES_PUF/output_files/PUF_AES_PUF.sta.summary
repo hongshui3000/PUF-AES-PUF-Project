@@ -1,0 +1,197 @@
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1100mV 85C Model Setup 'MODE[0]'
+Slack : -5.423
+TNS   : -96.857
+
+Type  : Slow 1100mV 85C Model Setup 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -3.622
+TNS   : -216.885
+
+Type  : Slow 1100mV 85C Model Setup 'CLK'
+Slack : -2.731
+TNS   : -2.731
+
+Type  : Slow 1100mV 85C Model Setup 'ClockIn'
+Slack : -1.748
+TNS   : -1.748
+
+Type  : Slow 1100mV 85C Model Hold 'CLK'
+Slack : 0.950
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Hold 'MODE[0]'
+Slack : 0.954
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Hold 'ClockIn'
+Slack : 0.998
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Hold 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : 1.380
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'CLK'
+Slack : -0.453
+TNS   : -0.847
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -0.394
+TNS   : -37.295
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'ClockIn'
+Slack : -0.394
+TNS   : -0.523
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'MODE[0]'
+Slack : -0.024
+TNS   : -0.047
+
+Type  : Slow 1100mV 0C Model Setup 'MODE[0]'
+Slack : -5.275
+TNS   : -94.204
+
+Type  : Slow 1100mV 0C Model Setup 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -3.549
+TNS   : -211.411
+
+Type  : Slow 1100mV 0C Model Setup 'CLK'
+Slack : -2.546
+TNS   : -2.546
+
+Type  : Slow 1100mV 0C Model Setup 'ClockIn'
+Slack : -1.619
+TNS   : -1.619
+
+Type  : Slow 1100mV 0C Model Hold 'MODE[0]'
+Slack : 0.820
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Hold 'CLK'
+Slack : 0.845
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Hold 'ClockIn'
+Slack : 0.932
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Hold 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : 1.270
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'CLK'
+Slack : -0.474
+TNS   : -0.868
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -0.394
+TNS   : -36.707
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'ClockIn'
+Slack : -0.394
+TNS   : -0.533
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'MODE[0]'
+Slack : -0.008
+TNS   : -0.014
+
+Type  : Fast 1100mV 85C Model Setup 'MODE[0]'
+Slack : -3.837
+TNS   : -60.850
+
+Type  : Fast 1100mV 85C Model Setup 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -2.567
+TNS   : -152.699
+
+Type  : Fast 1100mV 85C Model Setup 'CLK'
+Slack : -2.143
+TNS   : -2.143
+
+Type  : Fast 1100mV 85C Model Setup 'ClockIn'
+Slack : -1.062
+TNS   : -1.062
+
+Type  : Fast 1100mV 85C Model Hold 'MODE[0]'
+Slack : 0.487
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Hold 'ClockIn'
+Slack : 0.696
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Hold 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : 0.901
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Hold 'CLK'
+Slack : 0.955
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'CLK'
+Slack : -0.462
+TNS   : -0.576
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'MODE[0]'
+Slack : -0.219
+TNS   : -6.572
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -0.082
+TNS   : -0.334
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'ClockIn'
+Slack : 0.077
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Setup 'MODE[0]'
+Slack : -3.186
+TNS   : -50.829
+
+Type  : Fast 1100mV 0C Model Setup 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -2.249
+TNS   : -133.806
+
+Type  : Fast 1100mV 0C Model Setup 'CLK'
+Slack : -1.767
+TNS   : -1.767
+
+Type  : Fast 1100mV 0C Model Setup 'ClockIn'
+Slack : -0.896
+TNS   : -0.896
+
+Type  : Fast 1100mV 0C Model Hold 'MODE[0]'
+Slack : 0.459
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Hold 'ClockIn'
+Slack : 0.608
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Hold 'CLK'
+Slack : 0.676
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Hold 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : 0.767
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'CLK'
+Slack : -0.476
+TNS   : -0.610
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'MODE[0]'
+Slack : -0.178
+TNS   : -4.702
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'ArbiterPUF:\GEN:0:P1|DFlipFlop:\GEN:103:Final_State:DFF|Q'
+Slack : -0.039
+TNS   : -0.047
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'ClockIn'
+Slack : 0.082
+TNS   : 0.000
+
+------------------------------------------------------------

@@ -1,0 +1,257 @@
+library ieee;
+use ieee.std_logic_1164.all;
+USE ieee.numeric_std.ALL;
+
+entity PUF_AES_PUF is 
+	generic (BitWidth : integer := 128);
+	port(
+		CLK        			: in  std_logic;
+		RST        			: in  std_logic;
+		MODE     			: in  std_logic_vector(1 downto 0); --SW0.Sw1
+		SW     			   : in  std_logic_vector(2 downto 0); --SW9.Sw8,Sw7
+		--Buttons           : in  std_logic_vector(1 downto 0); --Key0,Key1
+		H0,H1,H2,H3,H5    : out std_logic_vector(0 to 6); --7Segment Displays
+		Response  			: buffer std_logic_vector(BitWidth-1 downto 0);
+		Done 	     			: out std_logic := '1');
+end entity;
+
+architecture Structural of PUF_AES_PUF is
+	component ArbiterPUF
+		port(
+			CLK        : in  std_logic;
+			RST        : in  std_logic;
+			Input	     : in  std_logic;  --initial input bit for MUX
+			Challenge  : in  std_logic_vector(BitWidth-1 downto 0);  --N-bit Challenge 
+			Key        : out std_logic);
+	end component;
+	
+	component ring_oscilator is
+    port( 
+			rst_i : in  std_logic;
+			ro_o  : out  std_logic);
+	end component;
+	
+	component AES
+		Port( 
+			clk    		: in  STD_LOGIC;
+			plaintext 	: in  STD_LOGIC_VECTOR (127 downto 0);
+			key         : in  STD_LOGIC_VECTOR (127 downto 0);
+			cyphertext  : out STD_LOGIC_VECTOR (127 downto 0));
+	end component;
+	
+	signal C     		   : std_logic_vector(BitWidth-1 downto 0) := x"4f53742927575e5538515e437b9156a8";  --Random Challenge key generated from  http://www.andrewscompanies.com/tools/wep.asp
+	signal aKey   		   : std_logic_vector(BitWidth-1 downto 0) := x"5d2212345ccdaa9898000b277ef988ab";  --5d2212345ccdaa9898000b277ef97069
+	signal PUFR1 		   : std_logic_vector(BitWidth-1 downto 0);
+	signal PUFR2 		   : std_logic_vector(BitWidth-1 downto 0);
+	signal AESCT 		   : std_logic_vector(BitWidth-1 downto 0);
+	signal State  		   : integer := 0;
+	signal d5            : std_logic_vector(0 to 6);
+	signal d3,d2,d1,d0   : std_logic_vector(3 downto 0);
+	signal ClockIn       : std_logic := '1';
+	
+begin
+
+-- PUF_AES_PUF Component Paring
+	GEN:
+	for i in 0 to (BitWidth-1) generate
+		PUF1: if (i <= BitWidth-1) generate
+			P1  : ArbiterPUF port map(CLK=>ClockIn, RST=>RST, Input=>CLK, Challenge=>C,Key=>PUFR1(i));
+			--Response(i)<=PUFR1(i);
+		end generate PUF1;
+	end generate GEN;
+	
+	A1: AES port map(clk=>CLK, plaintext=>PUFR1, key=>aKey, cyphertext=>AESCT);
+	
+	GEN2:
+	for i in 0 to (BitWidth-1) generate
+		PUF2: if (i <= BitWidth-1) generate
+			P2  : ArbiterPUF port map(CLK=>ClockIn, RST=>RST, Input=>AESCT(i), Challenge=>C,Key=>PUFR2(i));
+			--Response(i)<=PUFR1(i);
+		end generate PUF2;
+	end generate GEN2;
+-- End of Paring
+
+	process(CLK)
+	begin
+		if (rising_edge(CLK)) then
+			ClockIn <= not ClockIn;
+		end if;
+	end process;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	--DE10 Standard Output Test
+	process(MODE, SW)
+	begin
+		case MODE is
+			when "00" =>			--Output PUFR1
+				State <= to_integer(unsigned(SW));
+				H5 <= d5;
+			when "01" =>			--Output AES Cyphertext
+				State <= to_integer(unsigned(SW));
+				H5 <= d5;
+			when "10" =>			--Output PUFR2
+				State <= to_integer(unsigned(SW));
+				H5 <= d5;
+			when others =>
+		end case;
+	end process;
+	
+	process(State,d3,d2,d1,d0)
+	begin
+		case State is
+		 --             "ABCDEFG"
+			when 0 => 
+				d5 <= not "1111110";	-- 0
+				d3 <= AESCT(127 downto 124);
+				d2 <= AESCT(123 downto 120);
+				d1 <= AESCT(119 downto 116);
+				d0 <= AESCT(115 downto 112);
+			when 1 => 
+				d5 <= not "0110000";	-- 1
+				d3 <= AESCT(111 downto 108);
+				d2 <= AESCT(107 downto 104);
+				d1 <= AESCT(103 downto 100);
+				d0 <= AESCT(99 downto 96);
+			when 2 => 
+				d5 <= not "1101101";	-- 2
+				d3 <= AESCT(95 downto 92);
+				d2 <= AESCT(91 downto 88);
+				d1 <= AESCT(87 downto 84);
+				d0 <= AESCT(83 downto 80);
+			when 3 => 
+				d5 <= not "1111001";	-- 3
+				d3 <= AESCT(79 downto 76);
+				d2 <= AESCT(75 downto 72);
+				d1 <= AESCT(71 downto 68);
+				d0 <= AESCT(67 downto 64);
+			when 4 => 
+				d5 <= not "0110011";	-- 4
+				d3 <= AESCT(63 downto 60);
+				d2 <= AESCT(59 downto 56);
+				d1 <= AESCT(55 downto 52);
+				d0 <= AESCT(51 downto 48);
+			when 5 => 
+				d5 <= not "1011011";	-- 5
+				d3 <= AESCT(47 downto 44);
+				d2 <= AESCT(43 downto 40);
+				d1 <= AESCT(39 downto 36);
+				d0 <= AESCT(35 downto 32);
+			when 6 => 
+				d5 <= not "1011111";	-- 6
+				d3 <= AESCT(31 downto 28);
+				d2 <= AESCT(27 downto 24);
+				d1 <= AESCT(23 downto 20);
+				d0 <= AESCT(19 downto 16);
+			when 7 => 
+				d5 <= not "1110000";	-- 7
+				d3 <= AESCT(15 downto 12);
+				d2 <= AESCT(11 downto 8);
+				d1 <= AESCT(7 downto 4);
+				d0 <= AESCT(3 downto 0);
+			when others =>
+				d5 <= (others => '0');
+		end case;
+	end process;
+	
+	process(d3,d2,d1,d0)
+	begin
+		case d3 is
+		 --                       "ABCDEFG"
+			when x"0" => H3 <= not "1111110";	-- 0
+			when x"1" => H3 <= not "0110000";	-- 1
+			when x"2" => H3 <= not "1101101";	-- 2
+			when x"3" => H3 <= not "1111001";	-- 3
+			when x"4" => H3 <= not "0110011";	-- 4
+			when x"5" => H3 <= not "1011011";	-- 5
+			when x"6" => H3 <= not "1011111";	-- 6
+			when x"7" => H3 <= not "1110000";	-- 7
+			when x"8" => H3 <= not "1111111";	-- 8
+			when x"9" => H3 <= not "1110011";	-- 9
+			when x"A" => H3 <= not "1110111";	-- A
+			when x"B" => H3 <= not "0011111";	-- B
+			when x"C" => H3 <= not "0001101";	-- C
+			when x"D" => H3 <= not "0111101";	-- D
+			when x"E" => H3 <= not "1001111";	-- E
+			when x"F" => H3 <= not "1001111";	-- F
+			when others =>
+				H3 <= (others => '0');
+		end case;
+		
+		case d2 is
+		 --                       "ABCDEFG"
+			when x"0" => H2 <= not "1111110";	-- 0
+			when x"1" => H2 <= not "0110000";	-- 1
+			when x"2" => H2 <= not "1101101";	-- 2
+			when x"3" => H2 <= not "1111001";	-- 3
+			when x"4" => H2 <= not "0110011";	-- 4
+			when x"5" => H2 <= not "1011011";	-- 5
+			when x"6" => H2 <= not "1011111";	-- 6
+			when x"7" => H2 <= not "1110000";	-- 7
+			when x"8" => H2 <= not "1111111";	-- 8
+			when x"9" => H2 <= not "1110011";	-- 9
+			when x"A" => H2 <= not "1110111";	-- A
+			when x"B" => H2 <= not "0011111";	-- B
+			when x"C" => H2 <= not "0001101";	-- C
+			when x"D" => H2 <= not "0111101";	-- D
+			when x"E" => H2 <= not "1001111";	-- E
+			when x"F" => H2 <= not "1001111";	-- F
+			when others =>
+				H2 <= (others => '0');
+		end case;
+
+		case d1 is
+		 --                       "ABCDEFG"
+			when x"0" => H1 <= not "1111110";	-- 0
+			when x"1" => H1 <= not "0110000";	-- 1
+			when x"2" => H1 <= not "1101101";	-- 2
+			when x"3" => H1 <= not "1111001";	-- 3
+			when x"4" => H1 <= not "0110011";	-- 4
+			when x"5" => H1 <= not "1011011";	-- 5
+			when x"6" => H1 <= not "1011111";	-- 6
+			when x"7" => H1 <= not "1110000";	-- 7
+			when x"8" => H1 <= not "1111111";	-- 8
+			when x"9" => H1 <= not "1110011";	-- 9
+			when x"A" => H1 <= not "1110111";	-- A
+			when x"B" => H1 <= not "0011111";	-- B
+			when x"C" => H1 <= not "0001101";	-- C
+			when x"D" => H1 <= not "0111101";	-- D
+			when x"E" => H1 <= not "1001111";	-- E
+			when x"F" => H1 <= not "1001111";	-- F
+			when others =>
+				H1 <= (others => '0');
+		end case;
+		
+		case d0 is
+		 --                       "ABCDEFG"
+			when x"0" => H0 <= not "1111110";	-- 0
+			when x"1" => H0 <= not "0110000";	-- 1
+			when x"2" => H0 <= not "1101101";	-- 2
+			when x"3" => H0 <= not "1111001";	-- 3
+			when x"4" => H0 <= not "0110011";	-- 4
+			when x"5" => H0 <= not "1011011";	-- 5
+			when x"6" => H0 <= not "1011111";	-- 6
+			when x"7" => H0 <= not "1110000";	-- 7
+			when x"8" => H0 <= not "1111111";	-- 8
+			when x"9" => H0 <= not "1110011";	-- 9
+			when x"A" => H0 <= not "1110111";	-- A
+			when x"B" => H0 <= not "0011111";	-- B
+			when x"C" => H0 <= not "0001101";	-- C
+			when x"D" => H0 <= not "0111101";	-- D
+			when x"E" => H0 <= not "1001111";	-- E
+			when x"F" => H0 <= not "1001111";	-- F
+			when others =>
+				H0 <= (others => '0');
+		end case;
+	end process;
+	--End of Test
+end architecture; 
